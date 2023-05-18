@@ -72,7 +72,6 @@ async function run() {
             const id = req.params.id;
             const updateInfo = req.body;
             const filter = { _id: new ObjectId(id) }
-            console.log(filter)
             const updateDoc = {
                 $set: {
                     price: updateInfo.price,
@@ -83,6 +82,14 @@ async function run() {
             const result = await carCollection.updateOne(filter, updateDoc)
             res.send(result)
 
+        })
+
+        // delete a toy 
+        app.delete('/delete/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: new ObjectId(id) }
+            const result = await carCollection.deleteOne(query)
+            res.send(result)
         })
 
         // post a toy 
