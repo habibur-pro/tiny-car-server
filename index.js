@@ -30,10 +30,23 @@ async function run() {
         const carCollection = client.db("tiny_CarDB").collection("cars")
 
         // operations 
-        // get all cars to mongodb 
+
+        // get data by category 
         app.get('/cars', async (req, res) => {
-            const result = await carCollection.find().toArray()
-            res.send(result)
+            const category = req.query.sub_category;
+            if (category) {
+                const query = {
+                    sub_category: category
+                };
+
+                const result = await carCollection.find(query).toArray()
+                res.send(result)
+            }
+            else {
+                const result = await carCollection.find().toArray()
+                res.send(result)
+            }
+
         })
 
         // post a car 
