@@ -68,6 +68,23 @@ async function run() {
 
         })
 
+        app.patch('/update/:id', async (req, res) => {
+            const id = req.params.id;
+            const updateInfo = req.body;
+            const filter = { _id: new ObjectId(id) }
+            console.log(filter)
+            const updateDoc = {
+                $set: {
+                    price: updateInfo.price,
+                    quantity: updateInfo.quantity,
+                    description: updateInfo.description
+                }
+            }
+            const result = await carCollection.updateOne(filter, updateDoc)
+            res.send(result)
+
+        })
+
         // post a toy 
         app.post('/addToy', async (req, res) => {
             const car = req.body;
