@@ -30,10 +30,21 @@ async function run() {
         const carCollection = client.db("tiny_CarDB").collection("cars")
 
         // operations 
+        // get all cars to mongodb 
         app.get('/cars', async (req, res) => {
             const result = await carCollection.find().toArray()
             res.send(result)
         })
+
+        // post a car 
+        app.post('/addCar', async (req, res) => {
+            const car = req.body;
+            const result = await carCollection.insertOne(car)
+            res.send(result)
+
+        })
+
+
 
         // Send a ping to confirm a successful connection
         await client.db("admin").command({ ping: 1 });
