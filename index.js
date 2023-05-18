@@ -31,8 +31,8 @@ async function run() {
 
         // operations 
 
-        // get data by sub_category 
-        app.get('/cars', async (req, res) => {
+        // get toys by sub_category 
+        app.get('/toys', async (req, res) => {
             const category = req.query.sub_category;
             if (category) {
                 const query = {
@@ -50,18 +50,26 @@ async function run() {
         })
 
 
-        // get single car by id 
-        app.get('/cars/:id', async (req, res) => {
+        // get single toy by id 
+        app.get('/toys/:id', async (req, res) => {
             const id = req.params.id
-            console.log(id)
             const query = { _id: new ObjectId(id) }
             const result = await carCollection.findOne(query)
             res.send(result)
 
         })
 
-        // post a car 
-        app.post('/addCar', async (req, res) => {
+        // get toy by user 
+        app.get('/myToys', async (req, res) => {
+            const email = req.query.email;
+            const filter = { seller_email: email }
+            const result = await carCollection.find(filter).toArray()
+            res.send(result)
+
+        })
+
+        // post a toy 
+        app.post('/addToy', async (req, res) => {
             const car = req.body;
             const result = await carCollection.insertOne(car)
             res.send(result)
