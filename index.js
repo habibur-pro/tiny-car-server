@@ -31,21 +31,20 @@ async function run() {
 
         // operations 
 
-        // get toys by sub_category 
-        app.get('/toys', async (req, res) => {
-            const category = req.query.sub_category;
-            if (category) {
-                const query = {
-                    sub_category: category
-                };
 
-                const result = await carCollection.find(query).toArray()
-                res.send(result)
-            }
-            else {
-                const result = await carCollection.find().toArray()
-                res.send(result)
-            }
+        // get all toys 
+        app.get('/toys', async (req, res) => {
+            const result = await carCollection.find().toArray()
+            res.send(result)
+        })
+
+        // get toys by sub_category 
+        app.get('/toys/:sub_category', async (req, res) => {
+            const category = req.params.sub_category;
+            const query = { sub_category: category };
+
+            const result = await carCollection.find(query).toArray()
+            res.send(result)
 
         })
 
