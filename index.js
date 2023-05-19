@@ -42,39 +42,59 @@ async function run() {
 
         // get all toys 
         app.get('/toys', async (req, res) => {
-
-            let filter = {}
-
-            // toys by email 
-            if (req.query?.email) {
-                filter = { seller_email: req.query?.email }
-            }
-
-            // toys be search 
-
-            if (req.query?.q) {
-                filter = {
-                    name: {
-                        $regex: req.query?.q,
-                        $options: 'i'
-                    }
-                }
-            }
-            const result = await carCollection.find(filter).toArray()
+            const result = await carCollection.find().toArray()
             res.send(result)
+            // let filter = {}
+
+            // // toys by email 
+            // if (req.query?.email) {
+            //     filter = { seller_email: req.query?.email }
+            // }
+
+            // // toys by search 
+
+            // if (req.query?.q) {
+            //     filter = {
+            //         name: {
+            //             $regex: req.query?.q,
+            //             $options: 'i'
+            //         }
+            //     }
+            // }
+
 
         })
 
+        // get toys by email 
+        app.get('/myToys/:email', async (req, res) => {
+            const email = req.params.email;
+            const filter = { seller_email: email }
+            const result = await carCollection.find(filter).toArray()
+            res.send(result)
+        })
+
         // get toys by sub_category and user 
-        app.get('/toys/:sub_category', async (req, res) => {
+        app.get('/allToys/:sub_category', async (req, res) => {
             const category = req.params.sub_category;
             const query = { sub_category: category };
-
             const result = await carCollection.find(query).toArray()
             res.send(result)
 
         })
 
+        // get data by search 
+        app.get('/search', async (req, res) => {
+            const searchQuery = req.query.q
+            filter = {
+                name: {
+                    $regex: searchQuery,
+                    $options: 'i'
+                }
+            }
+
+            const result = await carCollection.find(filter).toArray()
+            res.send(result)
+        })
 
 
 
