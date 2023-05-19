@@ -43,9 +43,23 @@ async function run() {
         // get all toys 
         app.get('/toys', async (req, res) => {
             const email = req.query.email;
+            const searchQuery = req.query.q
             let query = {}
+
+            // toys by email 
             if (email) {
                 query = { seller_email: email }
+            }
+
+            // toys be search 
+
+            if (searchQuery) {
+                query = {
+                    name: {
+                        $regex: searchQuery,
+                        $options: 'i'
+                    }
+                }
             }
             const result = await carCollection.find(query).toArray()
             res.send(result)
@@ -63,20 +77,8 @@ async function run() {
         })
 
 
-        // toys by search 
-        app.get('/search', async (req, res) => {
-            const searchQuery = req.query.q;
-            const filter = {
-                name: {
-                    $regex: searchQuery,
-                    $options: 'i'
-                }
-            }
 
-            const result = await carCollection.find(filter).toArray()
-            res.send(result)
 
-        })
 
         // get single toy by id 
         app.get('/toys/:id', async (req, res) => {
