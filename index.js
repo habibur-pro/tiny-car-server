@@ -42,11 +42,17 @@ async function run() {
 
         // get all toys 
         app.get('/toys', async (req, res) => {
-            const result = await carCollection.find().toArray()
+            const email = req.query.email;
+            let query = {}
+            if (email) {
+                query = { seller_email: email }
+            }
+            const result = await carCollection.find(query).toArray()
             res.send(result)
+            console.log(query)
         })
 
-        // get toys by sub_category 
+        // get toys by sub_category and user 
         app.get('/toys/:sub_category', async (req, res) => {
             const category = req.params.sub_category;
             const query = { sub_category: category };
@@ -81,14 +87,8 @@ async function run() {
 
         })
 
-        // get toy by user 
-        app.get('/myToys', async (req, res) => {
-            const email = req.query.email;
-            const filter = { seller_email: email }
-            const result = await carCollection.find(filter).toArray()
-            res.send(result)
 
-        })
+
 
         app.patch('/update/:id', async (req, res) => {
             const id = req.params.id;
