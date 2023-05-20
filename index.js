@@ -44,32 +44,15 @@ async function run() {
         app.get('/toys', async (req, res) => {
             const result = await carCollection.find().toArray()
             res.send(result)
-            // let filter = {}
-
-            // // toys by email 
-            // if (req.query?.email) {
-            //     filter = { seller_email: req.query?.email }
-            // }
-
-            // // toys by search 
-
-            // if (req.query?.q) {
-            //     filter = {
-            //         name: {
-            //             $regex: req.query?.q,
-            //             $options: 'i'
-            //         }
-            //     }
-            // }
-
 
         })
 
         // get toys by email 
         app.get('/myToys/:email', async (req, res) => {
+            const limit = parseInt(req.query.limit) || 0
             const email = req.params.email;
             const filter = { seller_email: email }
-            const result = await carCollection.find(filter).toArray()
+            const result = await carCollection.find(filter).limit(limit).toArray()
             res.send(result)
         })
 
