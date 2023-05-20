@@ -42,17 +42,17 @@ async function run() {
 
         // get all toys 
         app.get('/toys', async (req, res) => {
-            const result = await carCollection.find().toArray()
+            const limit = parseInt(req.query.limit) || 0
+            const result = await carCollection.find().limit(limit).toArray()
             res.send(result)
 
         })
 
         // get toys by email 
         app.get('/myToys/:email', async (req, res) => {
-            const limit = parseInt(req.query.limit) || 0
             const email = req.params.email;
             const filter = { seller_email: email }
-            const result = await carCollection.find(filter).limit(limit).toArray()
+            const result = await carCollection.find(filter).toArray()
             res.send(result)
         })
 
