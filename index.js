@@ -50,9 +50,19 @@ async function run() {
 
         // get toys by email 
         app.get('/myToys/:email', async (req, res) => {
+            const priceFilter = req.query.filter;
+            let sort = {}
+            if (priceFilter === "ascending") {
+                sort = { price: 1 }
+            }
+            else if (priceFilter === "descending") {
+                sort = { price: -1 }
+            }
+
             const email = req.params.email;
+
             const filter = { seller_email: email }
-            const result = await carCollection.find(filter).toArray()
+            const result = await carCollection.find(filter).sort(sort).toArray()
             res.send(result)
         })
 
