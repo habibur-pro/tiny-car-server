@@ -94,18 +94,17 @@ async function run() {
 
 
 
-        app.patch('/update/:id', async (req, res) => {
+        app.put('/update/:id', async (req, res) => {
             const id = req.params.id;
             const updateInfo = req.body;
+            const options = { upsert: true }
             const filter = { _id: new ObjectId(id) }
             const updateDoc = {
                 $set: {
-                    price: updateInfo.price,
-                    quantity: updateInfo.quantity,
-                    description: updateInfo.description
+                    ...updateInfo
                 }
             }
-            const result = await carCollection.updateOne(filter, updateDoc)
+            const result = await carCollection.updateOne(filter, updateDoc, options)
             res.send(result)
 
         })
